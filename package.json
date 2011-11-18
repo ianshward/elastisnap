@@ -1,0 +1,20 @@
+{
+  "author": "",
+  "name": "elastisnap",
+  "description": "Amazon Elastic Block Store (EBS) rotating snapshots.",
+  "version": "0.0.0",
+  "repository": {
+    "url": ""
+  },
+  "main": "index.js",
+  "engines": {
+    "node": "0.4.x"
+  },
+  "dependencies": {
+    "aws-lib": "0.0.x",
+    "underscore": "1.1.x",
+    "optimist": "0.2.x",
+    "sh": "0.0.x"
+  },
+  "devDependencies": {}
+}
