@@ -46,7 +46,6 @@ function run(selfInstanceId) {
             params['Filter.2.Name'] = 'attachment.instance-id';
             params['Filter.2.Value.1'] = key;
             ec2.call('DescribeVolumes', params, function(result) {
-                console.log(result.volumeSet.item.volumeId);
                 var volume = result.volumeSet.item.volumeId;
                 var description = job.description + ' ' + device + ' ' + id;
                 ec2.call('CreateSnapshot', {VolumeId: volume, Description: description}, function(result) {
