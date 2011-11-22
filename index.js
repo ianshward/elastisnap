@@ -37,14 +37,14 @@ var jobs = options.jobs;
 //   - Deletes the oldest snapshot of the pool size is exceeded
 function run(selfInstanceId) {
     _.each(jobs, function(job, key) {
-        var id = key.substring(0,3) == 'self' ? selfInstanceId : key;
+        var id = key.substring(0,4) == 'self' ? selfInstanceId : key;
         var devices = job.devices.split(/\s*,\s*/);
         _.each(devices, function(device) {
             var params = {};
             params['Filter.1.Name'] = 'attachment.device';
             params['Filter.1.Value.1'] = device;
             params['Filter.2.Name'] = 'attachment.instance-id';
-            params['Filter.2.Value.1'] = key;
+            params['Filter.2.Value.1'] = id;
             ec2.call('DescribeVolumes', params, function(result) {
                 var volume = result.volumeSet.item.volumeId;
                 var description = job.description + ' ' + device + ' ' + id;
