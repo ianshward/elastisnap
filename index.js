@@ -37,7 +37,7 @@ var jobs = options.jobs;
 //   - Deletes the oldest snapshot of the pool size is exceeded
 function run(selfInstanceId) {
     _.each(jobs, function(job, key) {
-        var id = key == 'self' ? selfInstanceId : key;
+        var id = key.substring(0,3) == 'self' ? selfInstanceId : key;
         var devices = job.devices.split(/\s*,\s*/);
         _.each(devices, function(device) {
             var params = {};
