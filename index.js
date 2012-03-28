@@ -20,6 +20,26 @@ try {
    throw e;
 }
 
+var jobs;
+// Allow a single job to be passed in as cli args
+var single = {};
+if (argv.instanceid) {
+    var instanceid = argv.instanceid;
+    single[instanceid] = {};
+    _.each(argv, function(v, k) {
+        if (_.indexOf(['devices', 'pool', 'description'], k) > -1) {
+            single[instanceid][k] = argv[k];
+        }
+    });
+    if (!single[instanceid]['pool'] || !single[instanceid]['devices'] || !single[instanceid]['description']) {
+        console.log('When running a single job, must provide all of instanceid, pool, devices, and description');
+        process.exit(1);
+    }
+    jobs = single;
+} else {
+    jobs = options.jobs;
+}
+
 if (!options.awskey ||
     !options.awssecret) {
     console.log("Must provide all of awskey, awssecret, pool, description, and volume as --config parameters")
@@ -29,7 +49,6 @@ if (!options.awskey ||
 // version 2010-08-31 supports the 'Filter' parameter.
 ec2 = aws.createEC2Client(options.awskey, options.awssecret, {version: '2010-08-31'});
 
-var jobs = options.jobs;
 
 // This does the following:
 //   - Gets the volume-id based on device + instance-id
