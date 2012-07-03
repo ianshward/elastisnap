@@ -2,7 +2,7 @@ var aws = require("aws-lib"),
     _ = require("underscore"),
     argv = require('optimist').argv,
     fs = require('fs'),
-    sh = require('sh');
+    exec = require('child_process').exec;
 
 if (!argv.config) {
     console.log("Must provide --config argument which points to json settings file, such as --config settings.json");
@@ -47,7 +47,9 @@ if (!options.awskey ||
 }
 
 // version 2010-08-31 supports the 'Filter' parameter.
-ec2 = aws.createEC2Client(options.awskey, options.awssecret, {version: '2010-08-31'});
+ec2 = aws.createEC2Client(options.awskey, options.awssecret,
+  {version: '2010-08-31', host: 'ec2.' + options.region + '.amazonaws.com'}
+);
 
 
 // This does the following:
@@ -95,8 +97,9 @@ function run(selfInstanceId) {
 }
 
 function getInstanceId(cb) {
-    sh('wget -q -O - http://169.254.169.254/latest/meta-data/instance-id').result(function(id) {
-        cb(id);
+    exec('wget -q -O - http://169.254.169.254/latest/meta-data/instance-id',
+        function (error, stdout, stderr) {
+            cb(stdout);
     });
 }
 
