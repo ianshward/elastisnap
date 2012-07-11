@@ -1,0 +1,17 @@
+{
+    "awskey": "XXXXX",
+    "awssecret": "XXXXX",
+    "jobs": [
+        {
+            "instanceid": "i-XXXXXXX",
+            "pool": 3,
+            "device": "/dev/sdf1",
+            "description": "file cluster RAID"
+        }, {
+            "instanceid": "self",
+            "pool": 4,
+            "device": "/dev/sdg",
+            "description": "storage for logs"
+        }
+    ]
+}
