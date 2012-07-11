@@ -3,10 +3,12 @@
     "awssecret": "XXXXX",
     "jobs": [
         {
+            "instanceid": "i-XXXXXXX",
             "pool": 3,
             "devices": "/dev/sdf1, /dev/sdf2, /dev/sdf3, /dev/sdf4",
             "description": "file cluster RAID"
         }, {
+            "instanceid": "self",
             "pool": 4,
             "devices": "/dev/sdg",
             "description": "storage for logs"
