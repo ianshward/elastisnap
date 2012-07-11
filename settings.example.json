@@ -5,12 +5,12 @@
         {
             "instanceid": "i-XXXXXXX",
             "pool": 3,
-            "devices": "/dev/sdf1, /dev/sdf2, /dev/sdf3, /dev/sdf4",
+            "device": "/dev/sdf1",
             "description": "file cluster RAID"
         }, {
             "instanceid": "self",
             "pool": 4,
-            "devices": "/dev/sdg",
+            "device": "/dev/sdg",
             "description": "storage for logs"
         }
     ]
