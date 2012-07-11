@@ -7,7 +7,7 @@ Take rotating Amazon AWS EBS snapshots with this small node.js script.
 See setting.json for sample definitions. Options include:
 
 pool - the number of snapshots to maintain before destroying old ones.
-devices - a comma separated list of devices that should be snapshotted.
+device - name of device that should be snapshotted.
 description - used as the description for the snapshot along with the device name and the instance ID.
 
 `node index.js --config=settings.json` ... throw that in a hourly, daily, etc. cronjob and set the 'pool' size and you've got rotating snapshots.
