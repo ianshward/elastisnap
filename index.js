@@ -24,30 +24,20 @@ try {
 _.each(argv, function(v, k) {
     options[k] = argv[k] || options[k];
 });
-var jobs;
-// Allow a single job to be passed in as cli args
-var single = {};
-if (argv.instanceid) {
-    var instanceid = argv.instanceid;
-    single[instanceid] = {};
-    _.each(argv, function(v, k) {
-        if (_.indexOf(['devices', 'pool', 'description'], k) > -1) {
-            single[instanceid][k] = argv[k];
-        }
-    });
-    if (!single[instanceid]['pool'] || !single[instanceid]['devices'] || !single[instanceid]['description']) {
-        console.log('When running a single job, must provide all of instanceid, pool, devices, and description');
-        process.exit(1);
-    }
-    jobs = single;
-} else {
-    jobs = options.jobs;
+
+if (!options.awskey || !options.awssecret) {
+    console.log("Must provide all of awskey, awssecret --config parameters")
+    process.exit(1);
 }
 
-if (!options.awskey ||
-    !options.awssecret) {
-    console.log("Must provide all of awskey, awssecret, pool, description, and volume as --config parameters")
-    process.exit(1);
+// Allow a single job to be passed in as cli args
+if (argv.instanceid) {
+    var job = {};
+    _(['instanceid', 'pool', 'devices', 'description']).each(function(key) {
+        if (!_(_(argv).keys()).include(key)) throw new Error('Option ' + key + ' is required when running a single job.');
+        job[key] = argv[key];
+    });
+    options.jobs = [job];
 }
 
 // version 2010-08-31 supports the 'Filter' parameter.
@@ -61,8 +51,8 @@ ec2 = aws.createEC2Client(options.awskey, options.awssecret,
 //   - Creates a snapshot based on that volume-id
 //   - Deletes the oldest snapshot of the pool size is exceeded
 function run(selfInstanceId) {
-    _.each(jobs, function(job, key) {
-        var id = key.substring(0,4) == 'self' ? selfInstanceId : key;
+    _.each(options.jobs, function(job) {
+        var id = job.instanceid == 'self' ? selfInstanceId : job.instanceid;
         var devices = job.devices.split(/\s*,\s*/);
         _.each(devices, function(device) {
             var params = {};
